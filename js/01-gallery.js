@@ -2,31 +2,34 @@ import { galleryItems } from './gallery-items.js';
 // Change code below this line
 const gallery = document.querySelector('.gallery');
 
+const arrImg = galleryItems.map((item) => {
+  return `<li class="gallery__item">
+  <a class="gallery__link" href="${item.original}">
+    <img
+      class="gallery__image"
+      src="${item.preview}"
+      data-source="${item.original}"
+      alt="${item.description}"
+    />
+  </a>
+  </li>`
+})
+gallery.insertAdjacentHTML('beforeend', arrImg.join(""))
+
 
 gallery.addEventListener('click', event => {
-  if (event.target.tagName === 'IMG') {
-    event.preventDefault();
-    const largeImageUrl = event.target.dataset.source;
+event.preventDefault()
 
-    const instance = basicLightbox.create(`
-      <img src="${largeImageUrl}" alt="${event.target.alt}">
-    `);
+if (event.target.classList.contains('gallery__image') ) {
+  basicLightbox
+  .create(
+    `
+      <img class='img-generate-big' width="1400" height="900" src="${event.target.getAttribute(
+        "data-source"
+      )}">
+  `
+  )
+  .show();
 
-    instance.show();
-  }
-});
-
-const galleryList = galleryItems.map(item => `
-  <li class="gallery__item">
-    <a class="gallery__link" href="${item.original}">
-      <img
-        class="gallery__image"
-        src="${item.preview}"
-        data-source="${item.original}"
-        alt="${item.description}"
-      />
-    </a>
-  </li>
-`).join('');
-
-gallery.insertAdjacentHTML('beforeend', galleryList);
+}
+})
